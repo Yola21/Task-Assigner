@@ -1,12 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Route, Switch, BrowserRouter as Router } from "react-router-dom";
 import { initializeLogger } from "./common/logger";
 
 const App = () => {
-    useEffect(() => {
-        initializeLogger();
-        logger.info("This is logger");
-    }, []);
+  useEffect(() => {
+    initializeLogger();
+    logger.info("This is logger");
+  }, []);
     
   return (
     <Router>
