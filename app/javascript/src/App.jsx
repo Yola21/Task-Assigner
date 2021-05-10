@@ -6,6 +6,7 @@ import PageLoader from "./components/PageLoader";
 import { initializeLogger } from "./common/logger";
 import { registerIntercepts, setAuthHeaders } from "./apis/axios";
 import { ToastContainer } from "react-toastify";
+import ShowTask from "./components/Tasks/ShowTask";
 
 const App = () => {
   const [loading, setLoading] = useState(true);
@@ -28,6 +29,7 @@ const App = () => {
     <Router>
       <ToastContainer />
       <Switch>
+        <Route exact path="/tasks/:slug/show" component={ShowTask} />
         <Route exact path="/tasks/create" component={CreateTask} />
         <Route exact path="/dashboard" component={Dashboard} />
       </Switch>

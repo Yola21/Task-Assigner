@@ -1,9 +1,23 @@
 class TasksController < ApplicationController
+  before_action :load_task, only: [:show]
+
   def index
     tasks = Task.all
     render status: :ok, json: { tasks: tasks }
   end
 
+  def show
+    render status: :ok, json: { task: @task }
+  end
+
+  private
+
+  def load_task
+    @task = Task.find_by_slug!(params[:slug])
+    rescue ActiveRecord::RecordNotFound => errors
+      render json: {errors: errors}
+  end
+  
   def create
     @task = Task.new(task_params)
     if @task.save
