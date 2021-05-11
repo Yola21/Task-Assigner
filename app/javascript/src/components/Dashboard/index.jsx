@@ -5,6 +5,7 @@ import Container from "components/Container";
 import ListTasks from "components/Tasks/ListTasks";
 import tasksApi from "apis/tasks";
 import PageLoader from "components/PageLoader";
+import Logger from "js-logger";
 
 const Dashboard = ({ history }) => {
   const [tasks, setTasks] = useState([]);
@@ -16,7 +17,7 @@ const Dashboard = ({ history }) => {
       setTasks(response.data.tasks);
       setLoading(false);
     } catch (error) {
-      logger.error(error);
+      Logger.error(error);
       setLoading(false);
     }
   };
@@ -26,7 +27,7 @@ const Dashboard = ({ history }) => {
       await tasksApi.destroy(slug);
       await fetchTasks();
     } catch (error) {
-      logger.error(error);
+      Logger.error(error);
     }
   };
 
