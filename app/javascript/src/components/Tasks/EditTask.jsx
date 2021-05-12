@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-
-import Container from "components/Container";
-import TaskForm from "./Form/TaskForm";
 import tasksApi from "apis/tasks";
+import usersApi from "apis/users";
+import Container from "components/Container";
 import PageLoader from "components/PageLoader";
-import Toastr from "components/Common/Toastr";
-import Logger from "js-logger";
+import { useParams } from "react-router-dom";
+import TaskForm from "./Form/TaskForm";
+import Logger from 'js-logger';
 
 const EditTask = ({ history }) => {
   const [title, setTitle] = useState("");
   const [userId, setUserId] = useState("");
+  const [assignedUser, setAssignedUser] = useState("");
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
   const { slug } = useParams();
@@ -18,7 +19,10 @@ const EditTask = ({ history }) => {
   const handleSubmit = async event => {
     event.preventDefault();
     try {
-      await tasksApi.update({ slug, payload: { task: { title, user_id: userId } } });
+      await tasksApi.update({
+        slug,
+        payload: { task: { title, user_id: userId } },
+      });
       setLoading(false);
       history.push("/dashboard");
     } catch (error) {
@@ -27,11 +31,10 @@ const EditTask = ({ history }) => {
     }
   };
 
-  const fetchTaskDetails = async () => {
+  const fetchUserDetails = async () => {
     try {
-      const response = await tasksApi.show(slug);
-      setTitle(response.data.task.title);
-      setUserId(response.data.task.user_id);
+      const response = await usersApi.list();
+      setUsers(response.data.users);
     } catch (error) {
       Logger.error(error);
     } finally {
@@ -39,8 +42,24 @@ const EditTask = ({ history }) => {
     }
   };
 
+  const fetchTaskDetails = async () => {
+    try {
+      const response = await tasksApi.show(slug);
+      setTitle(response.data.task.title);
+      setAssignedUser(response.data.assigned_user);
+      setUserId(response.data.assigned_user.id);
+    } catch (error) {
+      Logger.error(error);
+    }
+  };
+
+  const loadData = async () => {
+    await fetchTaskDetails();
+    await fetchUserDetails();
+  };
+
   useEffect(() => {
-    fetchTaskDetails();
+    loadData();
   }, []);
 
   if (pageLoading) {
@@ -53,7 +72,16 @@ const EditTask = ({ history }) => {
 
   return (
     <Container>
-      <TaskForm type="update" title={title} userId={userId} setTitle={setTitle} setUserId={setUserId} loading={loading} handleSubmit={handleSubmit} />
+      <TaskForm
+        type="update"
+        title={title}
+        users={users}
+        assignedUser={assignedUser}
+        setTitle={setTitle}
+        setUserId={setUserId}
+        loading={loading}
+        handleSubmit={handleSubmit}
+      />
     </Container>
   );
 };
