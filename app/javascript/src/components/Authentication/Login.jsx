@@ -4,6 +4,7 @@ import LoginForm from "components/Authentication/Form/LoginForm";
 import authApi from "apis/auth";
 import { setAuthHeaders } from "apis/axios";
 import { setToLocalStorage } from "helpers/storage";
+import Logger from 'js-logger';
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -13,7 +14,8 @@ const Login = () => {
   const handleSubmit = async event => {
     event.preventDefault();
     try {
-      const response = await authApi.login({ login: { email, password } });
+      const response = await authApi.login({ login: { email, password, user_name } });
+      Logger.info("Response", response);
       setToLocalStorage({
         authToken: response.data.auth_token,
         email,
