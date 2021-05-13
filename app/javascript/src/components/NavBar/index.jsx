@@ -1,13 +1,26 @@
 import React from "react";
 import NavItem from "./NavItem";
 import authApi from "apis/auth";
-import Toastr from "components/Common/Toastr";
 import { resetAuthTokens } from "src/apis/axios.js";
-import { getFromLocalStorage } from "helpers/storage";
+import { getFromLocalStorage, setToLocalStorage } from "helpers/storage";
+import Logger from 'js-logger';
 
 const NavBar = () => {
   const userName = getFromLocalStorage("authUserName");
 
+  const handleLogout = async () => {
+    try {
+      await authApi.logout();
+      setToLocalStorage({ authToken: null,
+        email: null,
+        userId: null,
+        userName: null });
+      resetAuthTokens();
+      window.location.href = "/";
+    } catch (error) {
+      logger.error(error);
+    }
+  };
   return (
     <nav className="bg-white shadow">
       <div className="px-2 mx-auto max-w-7xl sm:px-4 lg:px-8">
@@ -31,8 +44,9 @@ const NavBar = () => {
               {userName}
             </span>
           </div>
-          {/* <div className="flex items-center justify-end">
-            <a
+          <div className="flex items-center justify-end">
+            <a 
+              onClick={handleLogout}
               className="inline-flex items-center px-1 pt-1 text-sm
              font-semibold leading-5 text-bb-gray-600 text-opacity-50
              transition duration-150 ease-in-out border-b-2
@@ -41,7 +55,7 @@ const NavBar = () => {
             >
               LogOut
             </a>
-          </div> */}
+          </div>
         </div>
       </div>
     </nav>

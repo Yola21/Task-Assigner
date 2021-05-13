@@ -1,8 +1,8 @@
-const setToLocalStorage = ({ authToken, email, userId, user_name }) => {
+const setToLocalStorage = ({ authToken, email, userId, userName }) => {
   localStorage.setItem("authToken", authToken);
   localStorage.setItem("authEmail", email);
   localStorage.setItem("authUserId", userId);
-  localStorage.setItem("authUserName", user_name);
+  localStorage.setItem("authUserName", userName);
 };
 
 const getFromLocalStorage = key => {

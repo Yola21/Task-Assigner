@@ -14,7 +14,7 @@ const Login = () => {
   const handleSubmit = async event => {
     event.preventDefault();
     try {
-      const response = await authApi.login({ login: { email, password, user_name } });
+      const response = await authApi.login({ login: { email, password } });
       Logger.info("Response", response);
       setToLocalStorage({
         authToken: response.data.auth_token,
