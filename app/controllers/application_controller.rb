@@ -1,5 +1,8 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :null_session
+  include Pundit
+  rescue_from Pundit::NotAuthorizedError, with: :handle_unauthorized_user
+
 
   def authenticate_user_using_x_auth_token
     user_email = request.headers["X-Auth-Email"]
@@ -22,4 +25,8 @@ class ApplicationController < ActionController::Base
     def current_user
       @current_user
     end
+
+  def handle_unauthorized_user
+    render json: { error: "Permission Denied" }, status: :forbidden
+  end
 end
