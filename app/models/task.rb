@@ -9,6 +9,7 @@ class Task < ApplicationRecord
 
 
   before_create :set_slug
+  after_create :log_task_details
 
   private
 
@@ -33,4 +34,9 @@ class Task < ApplicationRecord
       errors.add(:slug, t('task.slug.immutable'))
     end
   end
+
+  def log_task_details
+    TaskLoggerJob.perform_later(self)
+  end
+  
 end

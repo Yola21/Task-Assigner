@@ -56,3 +56,6 @@ gem 'react-rails'
 gem 'bcrypt', '~> 3.1.13'
 gem "pundit"
 gem 'rexml', '~> 3.2', '>= 3.2.4'
+gem 'bundler-audit', require: false
+gem 'ruby_audit', require: false
+gem 'sidekiq'
