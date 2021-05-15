@@ -1,28 +1,34 @@
 import React, { useState, useEffect } from "react";
 import { all, isNil, isEmpty, either } from "ramda";
-import { setAuthHeaders } from 'apis/axios';
-import Container from "components/Container";
 import tasksApi from "apis/tasks";
+import Container from "components/Container";
 import PageLoader from "components/PageLoader";
-import Logger from "js-logger";
 import Table from "components/Tasks/Table/index";
+import Logger from 'js-logger';
 
 const Dashboard = ({ history }) => {
-  const [loading, setLoading] = useState(true);
   const [pendingTasks, setPendingTasks] = useState([]);
   const [completedTasks, setCompletedTasks] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const fetchTasks = async () => {
     try {
-      setAuthHeaders();
       const response = await tasksApi.list();
-      const { pending, completed } = response.data.tasks;
-      setPendingTasks(pending);
-      setCompletedTasks(completed);
-      setLoading(false);
+      setPendingTasks(response.data.tasks.pending);
+      setCompletedTasks(response.data.tasks.completed);
     } catch (error) {
       Logger.error(error);
+    } finally {
       setLoading(false);
+    }
+  };
+
+  const handleProgressToggle = async ({ slug, progress }) => {
+    try {
+      await tasksApi.update({ slug, payload: { task: { progress } } });
+      await fetchTasks();
+    } catch (error) {
+      Logger.error(error);
     }
   };
 
@@ -39,18 +45,16 @@ const Dashboard = ({ history }) => {
     history.push(`/tasks/${slug}/show`);
   };
 
-  const updateTask = slug => {
-    history.push(`/tasks/${slug}/edit`);
-  };
-
-  const handleProgressToggle = async ({ slug, progress }) => {
+  const starTask = async (slug, status) => {
     try {
-      await tasksApi.update({ slug, payload: { task: { progress } } });
+      const toggledStatus = status === "starred" ? "unstarred" : "starred";
+      await tasksApi.update({
+        slug,
+        payload: { task: { status: toggledStatus } },
+      });
       await fetchTasks();
     } catch (error) {
       Logger.error(error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -69,8 +73,8 @@ const Dashboard = ({ history }) => {
   if (all(either(isNil, isEmpty), [pendingTasks, completedTasks])) {
     return (
       <Container>
-        <h1 className="text-xl leading-5 text-center">
-          You have not created or been assigned any tasks 😔
+        <h1 className="my-5 text-xl leading-5 text-center">
+          You have not created or been assigned any tasks 🥳
         </h1>
       </Container>
     );
@@ -84,6 +88,7 @@ const Dashboard = ({ history }) => {
           destroyTask={destroyTask}
           showTask={showTask}
           handleProgressToggle={handleProgressToggle}
+          starTask={starTask}
         />
       )}
       {!either(isNil, isEmpty)(completedTasks) && (
