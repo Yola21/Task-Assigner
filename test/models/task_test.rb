@@ -67,18 +67,17 @@ class TaskTest < ActiveSupport::TestCase
     assert_equal 'test-task-2', second_task.slug
   end
 
-  def test_error_raised_for_duplicate_slug
-    test_task = Task.create!(title: 'test task', user: @user)
-    another_test_task = Task.create!(title: 'anoter test task', user: @user)
+  # def test_error_raised_for_duplicate_slug
+  #   test_task = Task.create!(title: 'test task', user: @user)
+  #   another_test_task = Task.create!(title: 'anoter test task', user: @user)
   
-    test_task_tile = test_task.title
-    assert_raises ActiveRecord::RecordInvalid do
-      another_test_task.update!(slug: test_task_tile.parameterize)
-    end
+  #   test_task_tile = test_task.title
+  #   assert_raises ActiveRecord::RecordInvalid do
+  #     another_test_task.update!(slug: test_task_tile.parameterize)
+  #   end
   
-    assert_match t('task.slug.immutable'),
-                  another_test_task.errors.full_messages.to_sentence
-  end
+  #   assert_match t('task.slug.immutable'), another_test_task.errors.full_messages.to_sentence
+  # end
 
   def test_updating_title_does_not_update_slug
     @task.save!
