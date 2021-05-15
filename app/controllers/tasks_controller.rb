@@ -1,10 +1,12 @@
 class TasksController < ApplicationController
-  before_action :authenticate_user_using_x_auth_token, except: [:new, :edit]
+  before_action :authenticate_user_using_x_auth_token
   before_action :load_task, only: %i[show update destroy]
 
   def index
     tasks = policy_scope(Task)
-    render status: :ok, json: { tasks: tasks }
+    pending_tasks = tasks.pending
+    completed_tasks = tasks.completed
+    render status: :ok, json: { tasks: { pending: pending_tasks, completed: completed_tasks } }
   end
 
   def create
@@ -38,7 +40,7 @@ class TasksController < ApplicationController
     if @task.update(task_params.except(:authorize_owner))
       render status: :ok, json: { notice: 'Successfully updated task.' }
     else
-      render status: :unprocessable_entity, json: { errors: @task.errors.full_messages }
+      render status: :unprocessable_entity, json: { errors: @task.errors.full_messages.to_sentence }
     end
   end
 
@@ -54,15 +56,14 @@ class TasksController < ApplicationController
   
   private
 
+  def task_params
+    params.require(:task).permit(:title, :user_id, :authorize_owner, :progress)
+  end
+  
   def load_task
     @task = Task.find_by_slug!(params[:slug])
     rescue ActiveRecord::RecordNotFound => errors
       render json: {errors: errors}, status: :not_found
   end
 
-  private
-
-  def task_params
-    params.require(:task).permit(:title, :user_id, :authorize_owner)
-  end
 end
