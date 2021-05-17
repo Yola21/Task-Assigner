@@ -3,7 +3,7 @@
 </h1>
 
 <h3 align="center">
-    Made Task Assigner app in which user can assign task(s) to other regidtered user.
+    Made Task Assigner app in which an user can assign task(s) to other registered user.
 </h3>
 
 <h4 align="center"> 
