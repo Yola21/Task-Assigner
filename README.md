@@ -13,7 +13,7 @@
 <p align="center">
  <a href="#about">About</a> •
  <a href="#features">Features</a> •
- <a href="#screenshots">Screenshots</a> • 
+ <a href="#working-demo">Working Demo</a> • 
  <a href="#how-it-works">How it works</a> • 
  <a href="#tech-stack">Tech Stack</a> 
 </p>
@@ -34,7 +34,10 @@
    - [x] User can star and unstar the tasks 
 ---
 
-## Screenshots
+## Working Demo                                                                                        
+<p align="center">
+  <img alt="cases" src="https://github.com/Yola21/Task-Assigner/blob/main/snapshot/task-assigner.gif">
+</p>
 ---
 
 ## How it works
