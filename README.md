@@ -70,7 +70,10 @@ $ npm install
 $ bundle install
 
 # Run the application
-$ bundle exec rails server
+1) bundle exec rails server
+$ Open another tab in VSCode and run following commands
+2) sudo service redis-server start
+3) REDIS_URL="redis://127.0.0.1:6379/12" bundle exec sidekiq -e development -C config/sidekiq.yml 
 
 ```
 
