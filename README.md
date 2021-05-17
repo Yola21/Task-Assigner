@@ -89,13 +89,13 @@ The following tools and technologies were used in the construction of the projec
 -   **[Prettier](https://prettier.io/docs/en/install.html)**
 -   **[Husky](https://www.npmjs.com/package/husky)**
 -   **[Lint-Staged](https://www.npmjs.com/package/lint-staged)**
-> See the file  [package.json](https://github.com/Yola21/Tasks/blob/main/package.json)
+> See the file  [package.json](https://github.com/Yola21/Task-Assigner/blob/main/package.json)
 
 #### **Backend**   ([Ruby On Rails](https://rubyonrails.org/))
 
 -   **[Ruby](https://rubyonrails.org/)**
 -   **[Rails](https://rubyonrails.org/)**
-> See the file  [Gemfile](https://github.com/Yola21/Tasks/blob/main/Gemfile)
+> See the file  [Gemfile](https://github.com/Yola21/Task-Assigner/blob/main/Gemfile)
 
 #### **Utilities**
 
